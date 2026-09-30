@@ -313,6 +313,7 @@ export const SchedulePicker: React.FC<SchedulePickerProps> = ({
                     <SlotCard
                       key={slot.slotId}
                       slot={slot}
+                      date={selectedDate}
                       onBook={() => onSelectSlot(slot, selectedDate)}
                     />
                   ))}
@@ -349,6 +350,7 @@ export const SchedulePicker: React.FC<SchedulePickerProps> = ({
                     <SlotCard
                       key={slot.slotId}
                       slot={slot}
+                      date={selectedDate}
                       onBook={() => onSelectSlot(slot, selectedDate)}
                     />
                   ))}
@@ -366,9 +368,10 @@ export const SchedulePicker: React.FC<SchedulePickerProps> = ({
 interface SlotCardProps {
   slot: SlotAvailability;
   onBook: () => void;
+  date: string;
 }
 
-const SlotCard: React.FC<SlotCardProps> = ({ slot, onBook }) => {
+const SlotCard: React.FC<SlotCardProps> = ({ slot, onBook, date }) => {
   const isAvailable = slot.status === "AVAILABLE";
   const isPending = slot.status === "PENDING";
   const isBooked = slot.status === "BOOKED";
@@ -437,6 +440,14 @@ const SlotCard: React.FC<SlotCardProps> = ({ slot, onBook }) => {
             ৳{slot.discountedPrice.toLocaleString()}
           </div>
         </div>
+
+        <p className="text-xs text-stadium-400">
+          {new Date(date).toLocaleDateString("en-GB", {
+            weekday: "short",
+            day: "2-digit",
+            month: "short",
+          })}
+        </p>
 
         {isAvailable ? (
           <button

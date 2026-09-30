@@ -205,15 +205,14 @@ const SlotMatrixCard: React.FC<{
           onBookSlot();
         }
       }}
-      className={`p-4 rounded-xl border transition-all flex flex-col justify-between min-h-[140px] ${
-        isConfirmed
-          ? "bg-stadium-900 border-red-500/40 hover:border-red-400 hover:shadow-md cursor-pointer"
-          : isPending
+      className={`p-4 rounded-xl border transition-all flex flex-col justify-between min-h-[140px] ${isConfirmed
+        ? "bg-stadium-900 border-red-500/40 hover:border-red-400 hover:shadow-md cursor-pointer"
+        : isPending
           ? "bg-yellow-950/20 border-yellow-500/40 hover:border-yellow-400 hover:shadow-md cursor-pointer"
           : isReadOnly
-          ? "bg-stadium-900/40 border-stadium-800 cursor-default"
-          : "bg-stadium-900/60 border-stadium-750 hover:border-pitch-500/50 hover:bg-stadium-850 cursor-pointer"
-      }`}
+            ? "bg-stadium-900/40 border-stadium-800 cursor-default"
+            : "bg-stadium-900/60 border-stadium-750 hover:border-pitch-500/50 hover:bg-stadium-850 cursor-pointer"
+        }`}
     >
       <div>
         <div className="flex items-center justify-between pb-2 border-b border-stadium-800">
@@ -263,8 +262,8 @@ const SlotMatrixCard: React.FC<{
           {isBooked
             ? "View Details →"
             : isReadOnly
-            ? "Open for bookings"
-            : "+ Reserve Slot"}
+              ? "Open for bookings"
+              : "+ Reserve Slot"}
         </span>
       </div>
     </div>
