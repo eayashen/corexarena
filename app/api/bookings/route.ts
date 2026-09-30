@@ -113,22 +113,20 @@ export async function POST(request: NextRequest) {
     const bookingId = await generateBookingId();
     const cleanMobile = mobile.replace(/[\s-]/g, "");
 
-    // 6. Upload payment screenshot to Cloudinary Turf folder
+    // 6. Upload payment screenshot to Cloudinary Turf folder (with fallback to direct base64)
     let screenshotUrl = paymentScreenshot;
-    try {
-      if (paymentScreenshot.startsWith("data:image/")) {
+    if (paymentScreenshot.startsWith("data:image/")) {
+      try {
         const cloudinaryResult = await uploadPaymentScreenshot(paymentScreenshot, bookingId);
         screenshotUrl = cloudinaryResult.secure_url;
+      } catch (uploadError: any) {
+        console.warn(
+          `[Cloudinary Warning] Upload failed for booking ${bookingId}. Falling back to storing image directly in database. Error:`,
+          uploadError?.message || uploadError
+        );
+        // Fallback: Maintain screenshotUrl as the Base64 data URL so the booking succeeds
+        screenshotUrl = paymentScreenshot;
       }
-    } catch (uploadError: any) {
-      console.error("Cloudinary upload failed:", uploadError);
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Failed to upload payment screenshot. Please try again with a clear JPG or PNG image.",
-        },
-        { status: 500 }
-      );
     }
 
     // 7. Create Booking Document

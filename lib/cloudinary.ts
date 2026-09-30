@@ -30,17 +30,23 @@ export async function uploadPaymentScreenshot(
   const cleanBookingId = bookingId ? bookingId.replace(/[^a-zA-Z0-9_-]/g, "") : "booking";
   const customPublicId = `${cleanBookingId}_${timestamp}`;
 
-  const uploadResult = await cloudinary.uploader.upload(fileData, {
-    folder: "Turf",
-    public_id: customPublicId,
-    resource_type: "image",
-    overwrite: false,
-    transformation: [
-      { quality: "auto:good" },
-      { fetch_format: "auto" },
-    ],
-    tags: ["turf", "booking_screenshot"],
-  });
+  try {
+    const uploadResult = await cloudinary.uploader.upload(fileData, {
+      folder: "Turf",
+      public_id: customPublicId,
+      resource_type: "image",
+      overwrite: false,
+      transformation: [
+        { quality: "auto:good" },
+        { fetch_format: "auto" },
+      ],
+      tags: ["turf", "booking_screenshot"],
+    });
 
-  return uploadResult;
+    return uploadResult;
+  } catch (error: any) {
+    const errorMsg = error?.message || error?.error?.message || "Unknown error";
+    console.error(`[Cloudinary Error] Upload failed for ${customPublicId}:`, errorMsg);
+    throw new Error(`Cloudinary upload failed: ${errorMsg}`);
+  }
 }
